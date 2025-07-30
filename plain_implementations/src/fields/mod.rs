@@ -15,6 +15,7 @@ pub mod babybear;
 pub mod pallas;
 pub mod vesta;
 pub mod utils;
+pub mod m31;
 
 // sage:
 // p = 21888242871839275222246405745257275088548364400416034343698204186575808495617

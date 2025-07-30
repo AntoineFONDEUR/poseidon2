@@ -7,3 +7,4 @@ pub mod poseidon2_instance_bls12;
 pub mod poseidon2_instance_bn256;
 pub mod poseidon2_instance_pallas;
 pub mod poseidon2_instance_vesta;
+pub mod poseidon2_instance_m31;
