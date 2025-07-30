@@ -82,7 +82,7 @@ impl<F: PrimeField> Poseidon2<F> {
         }
     }
 
-    fn matmul_m4(&self, input: &mut [F]) {
+    fn matmul_m4(&self, input: &mut[F]) {
         let t = self.params.t;
         let t4 = t / 4;
         for i in 0..t4 {
@@ -116,7 +116,7 @@ impl<F: PrimeField> Poseidon2<F> {
         }
     }
 
-    fn matmul_external(&self, input: &mut [F]) {
+    fn matmul_external(&self, input: &mut[F]) {
         let t = self.params.t;
         match t {
             2 => {
@@ -162,7 +162,7 @@ impl<F: PrimeField> Poseidon2<F> {
         }
     }
 
-    fn matmul_internal(&self, input: &mut [F], mat_internal_diag_m_1: &[F]) {
+    fn matmul_internal(&self, input: &mut[F], mat_internal_diag_m_1: &[F]) {
         let t = self.params.t;
 
         match t {
@@ -193,7 +193,7 @@ impl<F: PrimeField> Poseidon2<F> {
                 input
                     .iter()
                     .skip(1)
-                    .take(t - 1)
+                    .take(t-1)
                     .for_each(|el| sum.add_assign(el));
                 // Add sum + diag entry * element to each element
                 for i in 0..input.len() {
@@ -230,10 +230,12 @@ impl<F: PrimeField> MerkleTreeHash<F> for Poseidon2<F> {
 #[cfg(test)]
 mod poseidon2_tests_goldilocks {
     use super::*;
-    use crate::fields::{goldilocks::FpGoldiLocks, utils::from_hex, utils::random_scalar};
+    use crate::{fields::{goldilocks::FpGoldiLocks, utils::from_hex, utils::random_scalar}};
     use crate::poseidon2::poseidon2_instance_goldilocks::{
-        POSEIDON2_GOLDILOCKS_12_PARAMS, POSEIDON2_GOLDILOCKS_16_PARAMS,
-        POSEIDON2_GOLDILOCKS_20_PARAMS, POSEIDON2_GOLDILOCKS_8_PARAMS,
+        POSEIDON2_GOLDILOCKS_8_PARAMS,
+        POSEIDON2_GOLDILOCKS_12_PARAMS,
+        POSEIDON2_GOLDILOCKS_16_PARAMS,
+        POSEIDON2_GOLDILOCKS_20_PARAMS,
     };
     use std::convert::TryFrom;
 
@@ -298,9 +300,10 @@ mod poseidon2_tests_goldilocks {
 #[cfg(test)]
 mod poseidon2_tests_babybear {
     use super::*;
-    use crate::fields::{babybear::FpBabyBear, utils::from_hex, utils::random_scalar};
+    use crate::{fields::{babybear::FpBabyBear, utils::from_hex, utils::random_scalar}};
     use crate::poseidon2::poseidon2_instance_babybear::{
-        POSEIDON2_BABYBEAR_16_PARAMS, POSEIDON2_BABYBEAR_24_PARAMS,
+        POSEIDON2_BABYBEAR_16_PARAMS,
+        POSEIDON2_BABYBEAR_24_PARAMS,
     };
     use std::convert::TryFrom;
 
@@ -312,7 +315,7 @@ mod poseidon2_tests_babybear {
     fn consistent_perm() {
         let instances = vec![
             Poseidon2::new(&POSEIDON2_BABYBEAR_16_PARAMS),
-            Poseidon2::new(&POSEIDON2_BABYBEAR_24_PARAMS),
+            Poseidon2::new(&POSEIDON2_BABYBEAR_24_PARAMS)
         ];
         for instance in instances {
             let t = instance.params.t;
@@ -375,9 +378,11 @@ mod poseidon2_tests_babybear {
 #[cfg(test)]
 mod poseidon2_tests_bls12 {
     use super::*;
-    use crate::fields::{bls12::FpBLS12, utils::from_hex, utils::random_scalar};
+    use crate::{fields::{bls12::FpBLS12, utils::from_hex, utils::random_scalar}};
     use crate::poseidon2::poseidon2_instance_bls12::{
-        POSEIDON2_BLS_2_PARAMS, POSEIDON2_BLS_3_PARAMS, POSEIDON2_BLS_4_PARAMS,
+        POSEIDON2_BLS_2_PARAMS,
+        POSEIDON2_BLS_3_PARAMS,
+        POSEIDON2_BLS_4_PARAMS,
         POSEIDON2_BLS_8_PARAMS,
     };
     use std::convert::TryFrom;
@@ -392,7 +397,7 @@ mod poseidon2_tests_bls12 {
             Poseidon2::new(&POSEIDON2_BLS_2_PARAMS),
             Poseidon2::new(&POSEIDON2_BLS_3_PARAMS),
             Poseidon2::new(&POSEIDON2_BLS_4_PARAMS),
-            Poseidon2::new(&POSEIDON2_BLS_8_PARAMS),
+            Poseidon2::new(&POSEIDON2_BLS_8_PARAMS)
         ];
         for instance in instances {
             let t = instance.params.t;
@@ -424,14 +429,8 @@ mod poseidon2_tests_bls12 {
             input_2.push(Scalar::from(i as u64));
         }
         let perm_2 = poseidon2_2.permutation(&input_2);
-        assert_eq!(
-            perm_2[0],
-            from_hex("0x73c46dd530e248a87b61d19e67fa1b4ed30fc3d09f16531fe189fb945a15ce4e")
-        );
-        assert_eq!(
-            perm_2[1],
-            from_hex("0x1f0e305ee21c9366d5793b80251405032a3fee32b9dd0b5f4578262891b043b4")
-        );
+        assert_eq!(perm_2[0], from_hex("0x73c46dd530e248a87b61d19e67fa1b4ed30fc3d09f16531fe189fb945a15ce4e"));
+        assert_eq!(perm_2[1], from_hex("0x1f0e305ee21c9366d5793b80251405032a3fee32b9dd0b5f4578262891b043b4"));
 
         let poseidon2_3 = Poseidon2::new(&POSEIDON2_BLS_3_PARAMS);
         let mut input_3: Vec<Scalar> = vec![];
@@ -439,18 +438,9 @@ mod poseidon2_tests_bls12 {
             input_3.push(Scalar::from(i as u64));
         }
         let perm_3 = poseidon2_3.permutation(&input_3);
-        assert_eq!(
-            perm_3[0],
-            from_hex("0x1b152349b1950b6a8ca75ee4407b6e26ca5cca5650534e56ef3fd45761fbf5f0")
-        );
-        assert_eq!(
-            perm_3[1],
-            from_hex("0x4c5793c87d51bdc2c08a32108437dc0000bd0275868f09ebc5f36919af5b3891")
-        );
-        assert_eq!(
-            perm_3[2],
-            from_hex("0x1fc8ed171e67902ca49863159fe5ba6325318843d13976143b8125f08b50dc6b")
-        );
+        assert_eq!(perm_3[0], from_hex("0x1b152349b1950b6a8ca75ee4407b6e26ca5cca5650534e56ef3fd45761fbf5f0"));
+        assert_eq!(perm_3[1], from_hex("0x4c5793c87d51bdc2c08a32108437dc0000bd0275868f09ebc5f36919af5b3891"));
+        assert_eq!(perm_3[2], from_hex("0x1fc8ed171e67902ca49863159fe5ba6325318843d13976143b8125f08b50dc6b"));
 
         let poseidon2_4 = Poseidon2::new(&POSEIDON2_BLS_4_PARAMS);
         let mut input_4: Vec<Scalar> = vec![];
@@ -458,22 +448,10 @@ mod poseidon2_tests_bls12 {
             input_4.push(Scalar::from(i as u64));
         }
         let perm_4 = poseidon2_4.permutation(&input_4);
-        assert_eq!(
-            perm_4[0],
-            from_hex("0x28ff6c4edf9768c08ae26290487e93449cc8bc155fc2fad92a344adceb3ada6d")
-        );
-        assert_eq!(
-            perm_4[1],
-            from_hex("0x0e56f2b6fad25075aa93560185b70e2b180ed7e269159c507c288b6747a0db2d")
-        );
-        assert_eq!(
-            perm_4[2],
-            from_hex("0x6d8196f28da6006bb89b3df94600acdc03d0ba7c2b0f3f4409a54c1db6bf30d0")
-        );
-        assert_eq!(
-            perm_4[3],
-            from_hex("0x07cfb49540ee456cce38b8a7d1a930a57ffc6660737f6589ef184c5e15334e36")
-        );
+        assert_eq!(perm_4[0], from_hex("0x28ff6c4edf9768c08ae26290487e93449cc8bc155fc2fad92a344adceb3ada6d"));
+        assert_eq!(perm_4[1], from_hex("0x0e56f2b6fad25075aa93560185b70e2b180ed7e269159c507c288b6747a0db2d"));
+        assert_eq!(perm_4[2], from_hex("0x6d8196f28da6006bb89b3df94600acdc03d0ba7c2b0f3f4409a54c1db6bf30d0"));
+        assert_eq!(perm_4[3], from_hex("0x07cfb49540ee456cce38b8a7d1a930a57ffc6660737f6589ef184c5e15334e36"));
     }
 }
 
@@ -481,10 +459,7 @@ mod poseidon2_tests_bls12 {
 #[cfg(test)]
 mod poseidon2_tests_bn256 {
     use super::*;
-    use crate::{
-        fields::{bn256::FpBN256, utils::from_hex, utils::random_scalar},
-        poseidon2::poseidon2_instance_bn256::POSEIDON2_BN256_PARAMS,
-    };
+    use crate::{fields::{bn256::FpBN256, utils::from_hex, utils::random_scalar}, poseidon2::poseidon2_instance_bn256::POSEIDON2_BN256_PARAMS};
     use std::convert::TryFrom;
 
     type Scalar = FpBN256;
@@ -522,18 +497,10 @@ mod poseidon2_tests_bn256 {
             input.push(Scalar::from(i as u64));
         }
         let perm = poseidon2.permutation(&input);
-        assert_eq!(
-            perm[0],
-            from_hex("0x0bb61d24daca55eebcb1929a82650f328134334da98ea4f847f760054f4a3033")
-        );
-        assert_eq!(
-            perm[1],
-            from_hex("0x303b6f7c86d043bfcbcc80214f26a30277a15d3f74ca654992defe7ff8d03570")
-        );
-        assert_eq!(
-            perm[2],
-            from_hex("0x1ed25194542b12eef8617361c3ba7c52e660b145994427cc86296242cf766ec8")
-        );
+        assert_eq!(perm[0], from_hex("0x0bb61d24daca55eebcb1929a82650f328134334da98ea4f847f760054f4a3033"));
+        assert_eq!(perm[1], from_hex("0x303b6f7c86d043bfcbcc80214f26a30277a15d3f74ca654992defe7ff8d03570"));
+        assert_eq!(perm[2], from_hex("0x1ed25194542b12eef8617361c3ba7c52e660b145994427cc86296242cf766ec8"));
+
     }
 }
 
@@ -541,9 +508,11 @@ mod poseidon2_tests_bn256 {
 #[cfg(test)]
 mod poseidon2_tests_pallas {
     use super::*;
-    use crate::fields::{pallas::FpPallas, utils::from_hex, utils::random_scalar};
+    use crate::{fields::{pallas::FpPallas, utils::from_hex, utils::random_scalar}};
     use crate::poseidon2::poseidon2_instance_pallas::{
-        POSEIDON2_PALLAS_3_PARAMS, POSEIDON2_PALLAS_4_PARAMS, POSEIDON2_PALLAS_8_PARAMS,
+        POSEIDON2_PALLAS_3_PARAMS,
+        POSEIDON2_PALLAS_4_PARAMS,
+        POSEIDON2_PALLAS_8_PARAMS,
     };
     use std::convert::TryFrom;
 
@@ -556,7 +525,7 @@ mod poseidon2_tests_pallas {
         let instances = vec![
             Poseidon2::new(&POSEIDON2_PALLAS_3_PARAMS),
             Poseidon2::new(&POSEIDON2_PALLAS_4_PARAMS),
-            Poseidon2::new(&POSEIDON2_PALLAS_8_PARAMS),
+            Poseidon2::new(&POSEIDON2_PALLAS_8_PARAMS)
         ];
         for instance in instances {
             let t = instance.params.t;
@@ -588,18 +557,10 @@ mod poseidon2_tests_pallas {
             input.push(Scalar::from(i as u64));
         }
         let perm = poseidon2.permutation(&input);
-        assert_eq!(
-            perm[0],
-            from_hex("0x1a9b54c7512a914dd778282c44b3513fea7251420b9d95750baae059b2268d7a")
-        );
-        assert_eq!(
-            perm[1],
-            from_hex("0x1c48ea0994a7d7984ea338a54dbf0c8681f5af883fe988d59ba3380c9f7901fc")
-        );
-        assert_eq!(
-            perm[2],
-            from_hex("0x079ddd0a80a3e9414489b526a2770448964766685f4c4842c838f8a23120b401")
-        );
+        assert_eq!(perm[0], from_hex("0x1a9b54c7512a914dd778282c44b3513fea7251420b9d95750baae059b2268d7a"));
+        assert_eq!(perm[1], from_hex("0x1c48ea0994a7d7984ea338a54dbf0c8681f5af883fe988d59ba3380c9f7901fc"));
+        assert_eq!(perm[2], from_hex("0x079ddd0a80a3e9414489b526a2770448964766685f4c4842c838f8a23120b401"));
+
     }
 }
 
@@ -607,10 +568,7 @@ mod poseidon2_tests_pallas {
 #[cfg(test)]
 mod poseidon2_tests_vesta {
     use super::*;
-    use crate::{
-        fields::{utils::from_hex, utils::random_scalar, vesta::FpVesta},
-        poseidon2::poseidon2_instance_vesta::POSEIDON2_VESTA_PARAMS,
-    };
+    use crate::{fields::{vesta::FpVesta, utils::from_hex, utils::random_scalar}, poseidon2::poseidon2_instance_vesta::POSEIDON2_VESTA_PARAMS};
     use std::convert::TryFrom;
 
     type Scalar = FpVesta;
@@ -648,18 +606,10 @@ mod poseidon2_tests_vesta {
             input.push(Scalar::from(i as u64));
         }
         let perm = poseidon2.permutation(&input);
-        assert_eq!(
-            perm[0],
-            from_hex("0x261ecbdfd62c617b82d297705f18c788fc9831b14a6a2b8f61229bef68ce2792")
-        );
-        assert_eq!(
-            perm[1],
-            from_hex("0x2c76327e0b7653873263158cf8545c282364b183880fcdea93ca8526d518c66f")
-        );
-        assert_eq!(
-            perm[2],
-            from_hex("0x262316c0ce5244838c75873299b59d763ae0849d2dd31bdc95caf7db1c2901bf")
-        );
+        assert_eq!(perm[0], from_hex("0x261ecbdfd62c617b82d297705f18c788fc9831b14a6a2b8f61229bef68ce2792"));
+        assert_eq!(perm[1], from_hex("0x2c76327e0b7653873263158cf8545c282364b183880fcdea93ca8526d518c66f"));
+        assert_eq!(perm[2], from_hex("0x262316c0ce5244838c75873299b59d763ae0849d2dd31bdc95caf7db1c2901bf"));
+
     }
 }
 
